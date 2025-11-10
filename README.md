@@ -1,8 +1,11 @@
-# 🚀 Cudy WR3K + OpenWrt Tutorial
+# 🚀 Cudy + OpenWrt Tutorial
 
-This guide walks you through upgrading your **Cudy WR3K router** to
+This guide walks you through upgrading your **Cudy router** to
 OpenWrt, enabling LuCI Web UI, blocking ads, setting up WireGuard VPN
 (general steps and provider-specific instructions), and managing IPv6.
+
+# 🛒 Buying Suggestion
+Buying Suggestion: Prefer the Cudy WR3000E over other WR3000 variants if you plan to install OpenWrt — it offers significantly more memory, supports Wi-Fi 6, and overall provides excellent value for money (VFM)
 
 ------------------------------------------------------------------------
 
@@ -50,7 +53,7 @@ service uhttpd reload
 -   Set a new password for root.
 -   Go to **Network → Interfaces → LAN**
     -   Change IPv4 address → `192.168.2.1/24`
-    -   Save & Apply
+    -   **Save & Apply**
 
 ------------------------------------------------------------------------
 
@@ -103,7 +106,7 @@ service uhttpd reload
     -   Edit interface with Name → `wg0`
     -   Go to `Firewall Settings`
     -   Create / Assign firewall-zone → `vpn` (see step 2)
-	-   Save & Apply
+	-   **Save & Apply**
 5.  Kill Switch Rule (Optional):
     -   Go to **Traffic Rules**
     -   Add Rule:
@@ -114,7 +117,7 @@ service uhttpd reload
 
 ------------------------------------------------------------------------
 
-## 🌍 Step 5.1 --- NordVPN Setup (Provider-Specific)
+## 🌍 Step 5.1.1 --- NordVPN Setup (Provider-Specific)
 
 1.  **Generate Credentials**
     -   Go to [Nord Account Access
@@ -133,7 +136,38 @@ service uhttpd reload
     -   Go to **Network → Interfaces → wg0**
     -   Import your configuration file → **Load configuration...**
     -   In Peers → Edit → ✔ Route Allowed IPs
-    -   Save
+    -   **Save**
+
+------------------------------------------------------------------------
+
+## 📄🔓 Step 5.2 --- VPN Whitelisting (Enable Policy-Based Routing)
+
+1.  Go to **System → Software**
+    -   Update Lists
+    -   Install: `luci-app-pbr`
+
+2.  Go to **Services → Policy-Based Routing**
+    -   Under “Policies,” click Add for each device you want to bypass the VPN
+        -   Name: any description, e.g. `Smart TV`
+        -   Source MAC address: `AA:BB:CC:DD:EE:FF`
+        -   Interface: `wan`
+        -   **Leave others blank**
+
+3.  Kill Switch Rule (If enabled -- Optional)
+    -   Go to **Network → Firewall → Traffic Rules**
+    -   Edit your rule named `vpn-killswitch`
+    -   Under Advanced Settings:
+    -   Find Source MAC address
+    -   Add `36:17:CD:F0:FF:FC`
+        - To use the “!” (NOT) operator in the killswitch rule, we need to edit the firewall configuration file directly via SSH, since LuCI sanitizes that character out
+            -   ssh root@192.168.2.1
+            -   vi /etc/config/firewall
+            -   Locate your ``vpn-killswitch`` rule and find the line starting with ``list src_mac``
+                -   Press ``i`` to enter ``insert mode``, then add “!” before your MAC address.
+                -   ``list src_mac '!36:17:CD:F0:FF:FC'``
+                -   Press ``Esc``, then type ``:wq`` and hit ``Enter`` to save and exit.
+                -   Restart the firewall to apply changes: ``/etc/init.d/firewall restart``
+    -   Click **Save & Apply**
 
 ------------------------------------------------------------------------
 

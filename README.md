@@ -160,8 +160,8 @@ service uhttpd reload
     -   Find Source MAC address
     -   Add `36:17:CD:F0:FF:FC`
         - To use the “!” (NOT) operator in the killswitch rule, we need to edit the firewall configuration file directly via SSH, since LuCI sanitizes that character out
-            -   ssh root@192.168.2.1
-            -   vi /etc/config/firewall
+            -   ``ssh root@192.168.2.1``
+            -   ``vi /etc/config/firewall``
             -   Locate your ``vpn-killswitch`` rule and find the line starting with ``list src_mac``
                 -   Press ``i`` to enter ``insert mode``, then add “!” before your MAC address.
                 -   ``list src_mac '!36:17:CD:F0:FF:FC'``

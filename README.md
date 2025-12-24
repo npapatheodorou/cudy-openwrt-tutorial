@@ -61,7 +61,7 @@ service uhttpd reload
 
 1.  Go to **System → Software**
     -   Update Lists
-    -   Install: `adblock` and `luci-app-adblock`
+    -   Install: `adblock`, `luci-app-adblock` and `stubby`
 2.  Configure via **Services → Adblock**:
     -   ✔ Force Local DNS
     -   ✔ Forced Zones → WAN & LAN
@@ -71,12 +71,10 @@ service uhttpd reload
 3.  Additional settings:
     -   Download Utility → `uclient-fetch`
     -   DNS Backend → `dnsmasq`
-    -   Feed Selection → `adaway` (for mobile)
-4.  Install **Stubby** (`stubby` package):
-    -   Go to **Network → DHCP & DNS**
-    -   Forward DNS → `127.0.0.1#5453` and `0::1#5453`
-    -   Ignore resolv file ✔
-    -   Use custom DNS: `1.1.1.1`
+    -   Feed Selection → `android_tracking`, `anti_ad` and `smarttv_tracking`
+4.  Go to **Network → DNS** 
+    - **Forwards → DNS Forwards** → `127.0.0.1#5453` and `0::1#5453`
+    - **Resolv & Hosts Files → Ignore resolv file** `✔`
 5.  Restart **dnsmasq** from **System → Startup**.
 
 ------------------------------------------------------------------------
@@ -100,7 +98,7 @@ service uhttpd reload
         -   ✔ MSS Clamping
         -   Covered Networks → `wg0`
 		-   Allow forward from source zones → `lan`
-    -   Lan Forwarding:
+    -   **Lan Forwarding**:
 		-   Edit `lan` → Allow forward to destination zones → `wg0`
 4.  Go again to **Network → Interfaces**
     -   Edit interface with Name → `wg0`
@@ -124,7 +122,7 @@ service uhttpd reload
         Tokens](https://my.nordaccount.com/dashboard/nordvpn/access-tokens/)
         → Generate a token.
     -   Use [Nord Key Generator](https://wg-nord.pages.dev/key) or the
-        provided PowerShell script to generate a **private key**.
+        provided PowerShell script `./wireguard.ps1` to generate a **private key**.
 2.  **Find Your Recommended Server**
     -   Go to [NordVPN Manual
         Configuration](https://my.nordaccount.com/dashboard/nordvpn/manual-configuration/server-recommendation/).
@@ -185,12 +183,13 @@ uci set dhcp.wan.ndp='disabled'
 ```
 
 
-**vi /etc/sysctl.conf**
-``` bash
+### Editing /etc/sysctl.conf
+- vi /etc/sysctl.conf
+- ``` bash
 net.ipv6.conf.all.disable_ipv6=1
 net.ipv6.conf.default.disable_ipv6=1
-sysctl -p
 ```
+- sysctl -p
 
 ### Disable `odhcpd`
 

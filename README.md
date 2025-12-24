@@ -172,42 +172,70 @@ service uhttpd reload
 ## 🌐 Step 6 --- Manage IPv6
 
 ### Disable IPv6
+1.  Remove WAN6 interface entirely
+    ``` bash
+    uci delete network.wan6
+    ```
+2.  Disable IPv6 on LAN
+    ``` bash
+    uci set network.lan.ipv6='0'
+    uci set network.lan.delegate='0'
+    uci set dhcp.lan.dhcpv6='disabled'
+    uci set dhcp.lan.ra='disabled'
+    ```
+3.  Commit changes
+4.  Disable odhcpd (not needed without IPv6)
+    ``` bash
+    /etc/init.d/odhcpd disable
+    /etc/init.d/odhcpd stop
+    ```
+5.  **Optional:** Kernel-Level Disable
+    ``` bash
+    cat >> /etc/sysctl.conf << 'EOF'
+    net.ipv6.conf.all.disable_ipv6=1
+    net.ipv6.conf.default.disable_ipv6=1
+    EOF
+    sysctl -p
+    ```
+6.  Restart network
+    ``` bash
+    /etc/init.d/network restart
+    ```
 
-``` bash
-uci set dhcp.lan.dhcpv6='disabled'
-uci set dhcp.lan.ra='disabled'
-uci set dhcp.lan.ndp='disabled'
-uci set dhcp.wan.dhcpv6='disabled'
-uci set dhcp.wan.ra='disabled'
-uci set dhcp.wan.ndp='disabled'
-```
-
-
-### Editing /etc/sysctl.conf
-- vi /etc/sysctl.conf
-- ``` bash
-net.ipv6.conf.all.disable_ipv6=1
-net.ipv6.conf.default.disable_ipv6=1
-```
-- sysctl -p
-
-### Disable `odhcpd`
-
-``` bash
-uci set dhcp.@odhcpd[0].maindhcp='0'
-uci set dhcp.@odhcpd[0].ra='disabled'
-uci set dhcp.@odhcpd[0].dhcpv6='disabled'
-uci commit
-/etc/init.d/odhcpd disable
-/etc/init.d/odhcpd stop
-/etc/init.d/network restart
-```
-
-### Re-enable IPv6
-
-Reverse the above changes (set values back to `server/relay/hybrid`,
-remove disable flags).
-
+### Enable IPv6
+1.  Create WAN6 interface
+    ``` bash
+    uci set network.wan6=interface
+    uci set network.wan6.proto='dhcpv6'
+    uci set network.wan6.device='@wan'
+    ```
+2.  Enable IPv6 on LAN
+    ``` bash
+    uci set network.lan.ipv6='1'
+    uci set network.lan.delegate='1'
+    uci set dhcp.lan.dhcpv6='server'
+    uci set dhcp.lan.ra='server'
+    ```
+3.  Commit changes
+    ``` bash
+    uci commit
+    ```
+4.  Enable odhcpd
+    ``` bash
+    /etc/init.d/odhcpd enable
+    /etc/init.d/odhcpd start
+    ```
+5.  **Optional:** Remove Kernel-Level Disable (if previously added)
+    ``` bash
+    sed -i '/net.ipv6.conf.all.disable_ipv6/d' /etc/sysctl.conf
+    sed -i '/net.ipv6.conf.default.disable_ipv6/d' /etc/sysctl.conf
+    sysctl -w net.ipv6.conf.all.disable_ipv6=0
+    sysctl -w net.ipv6.conf.default.disable_ipv6=0
+    ```
+6.  Restart network
+    ``` bash
+    /etc/init.d/network restart
+    ```
 ------------------------------------------------------------------------
 
 ## 🎉 Done!

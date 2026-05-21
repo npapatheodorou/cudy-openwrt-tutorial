@@ -12,11 +12,16 @@ Buying Suggestion: Prefer the Cudy WR3000E over other WR3000 variants if you pla
 ## 📥 Step 1 --- Download Required Files
 
 1.  **OpenWrt Firmware (without recovery TFTP):**
-    [Download
-    here](https://drive.google.com/drive/folders/1BKVarlwlNxf7uJUtRhuMGUqeCa5KpMnj?usp=sharing)
+    Select the appropriate firmware according to your router’s model. [Download here](./Cudy%20Intermediary%20OpenWRT%20Firmware/)
 
 2.  **OpenWrt Firmware Finder (SNAPSHOT builds):**
-    [Visit firmware selector](https://firmware-selector.openwrt.org/)
+    Select the firmware that matches your router’s model; ensure the version chosen is `SNAPSHOT`.
+    <details>
+        <summary><a href="https://firmware-selector.openwrt.org/">Download Here</a></summary>
+        <p align="center">
+            <img src="./assets/images/s1_2.png" width="800"/>
+        </p>
+    </details>
 
 3.  **PuTTY (SSH client):**
     [Download PuTTY](https://www.putty.org/)
@@ -26,15 +31,27 @@ Buying Suggestion: Prefer the Cudy WR3000E over other WR3000 variants if you pla
 ## ⚡ Step 2 --- Flash OpenWrt
 
 1.  Access router at `192.168.10.1` (Cudy's portal).
-2.  Upgrade firmware with the OpenWrt image.
+2.  <details>
+        <summary>Upgrade the firmware using the OpenWrt image downloaded in Step 1.1.</summary>
+        <p align="center">
+            <img src="./assets/images/s2_1.png" width="800"/>
+        </p>
+    </details>
 3.  After upgrade → go to
     `192.168.1.1 → System → Backup / Flash Firmware`.
-4.  Upload new file and start upgrade.
+4.  <details>
+        <summary>Upload new file and start upgrade using the image download in Step 1.2.</summary>
+        <p align="center">
+            <img src="./assets/images/s2_4.png" width="800"/>
+        </p>
+    </details>
 5.  Since the snapshot has no UI:
     -   Open **PuTTY** and connect to `192.168.1.1` via SSH.
     -   Login as `root` (no password first time).
 
 ------------------------------------------------------------------------
+
+> If an error occurs at any stage of the process, you can simply SSH into the system and run `firstboot && reboot`
 
 ## 🖥️ Step 3 --- Install LuCI Web Interface
 
@@ -56,7 +73,12 @@ uci commit uhttpd
 👉 After restart, log in at `192.168.1.1` via LuCI.
 -   Set a new password for root.
 -   Go to **Network → Interfaces → LAN**
-    -   Change IPv4 address → `192.168.2.1/24`
+    -   <details>
+            <summary>Change IPv4 address → `192.168.2.1/24`</summary>
+            <p align="center">
+                <img src="./assets/images/bg3_2.png" width="800"/>
+            </p>
+        </details>
     -   **Save & Apply**
 
 
@@ -65,19 +87,55 @@ uci commit uhttpd
 1.  Go to **System → Software**
     -   Update Lists
     -   Install: `adblock`, `luci-app-adblock`
+    -   <details>
+            <summary>Image Here</summary>
+            <p align="center">
+                <img src="./assets/images/s4_1.png" width="800"/>
+            </p>
+        </details>
+
 2.  Configure via **Services → Adblock**:
-    -   ✔ Force Local DNS
-    -   ✔ Forced Zones → WAN & LAN
-    -   ✔ Forced Ports → all
-    -   ✔ TLD Compression
-    -   ✔ DNS Report
-3.  Additional settings:
-    -   Download Utility → `uclient-fetch`
-    -   DNS Backend → `dnsmasq`
-    -   Feed Selection → `android_tracking`, `anti_ad` and `smarttv_tracking`
-4.  Go to **Network → DNS** 
-    - **Resolv & Hosts Files → Ignore resolv file** `✔`
-5.  Restart **dnsmasq** from **System → Startup**.
+    - **General Settings**
+        -   ✔ TLD Compression
+        -   ✔ DNS Report
+        -   <details>
+                <summary>Images Here</summary>
+                <p align="center">
+                    <img src="./assets/images/s4_2_1.png" width="800"/>
+                </p>
+            </details>
+    - **Firewall Settings**
+        -   Forced Zones → `@lan`, `@wan`, `@wan6`
+        -   Forced Ports → `853`, `53`, `5353`
+        -   <details>
+                <summary>Images Here</summary>
+                <p align="center">
+                    <img src="./assets/images/s4_2_2.png" width="800"/>
+                </p>
+            </details>
+    - **Advanced DNS Settings**
+        - DNS Backend → `dnsmasq`
+        - <details>
+                <summary>Image Here</summary>
+                <p align="center">
+                    <img src="./assets/images/s4_2_3.png" width="800"/>
+                </p>
+            </details>
+    - **Feed Selection**
+        - Blocklist Feed → `adguard (L, general)`, `adguard_tracking (L, tracking)`, `android_tracking (S, tracking)`, `anti_ad (L, compilation)`, `certpl (L, phishing)`
+        - <details>
+                <summary>Image Here</summary>
+                <p align="center">
+                    <img src="./assets/images/s4_2_4.png" width="800"/>
+                </p>
+            </details>
+3.  Restart **dnsmasq** from **System → Startup**.
+    <details>
+        <summary>Image Here</summary>
+        <p align="center">
+            <img src="./assets/images/s4_3_1.png" width="800"/>
+        </p>
+    </details>
 
 ------------------------------------------------------------------------
 
@@ -122,18 +180,15 @@ uci commit uhttpd
 <summary><strong>🛰️ NordVPN</strong></summary>
 
 1.  **Generate Credentials**
-    -   Go to [Nord Account Access
-        Tokens](https://my.nordaccount.com/dashboard/nordvpn/access-tokens/)
-        → Generate a token.
-    -   Use [Nord Key Generator](https://wg-nord.pages.dev/key) or the
-        provided PowerShell script `./wireguard.ps1` to generate a **private key**.
+    -   Go to [Nord Account Access Tokens](https://my.nordaccount.com/dashboard/nordvpn/access-tokens/)
+        → `Generate a token`.
+    -   Use the provided .exe file `./nordvpn_priv_key_extractor.exe` to generate a **private key also known as `nordlynx_private_key`**.
 2.  **Find Your Recommended Server**
     -   Go to [NordVPN Manual
         Configuration](https://my.nordaccount.com/dashboard/nordvpn/manual-configuration/server-recommendation/).
 3.  **Download Configuration**
-    -   From [Nord Key Generator](https://wg-nord.pages.dev/)
-    -   Open the downloaded `.conf` file and insert your **private
-        key**.
+    -   From [Nord Configs](https://wg-nord.pages.dev/)
+    -   Open the downloaded `.conf` file and insert your **private key also known as `nordlynx_private_key`**.
 4.  **Configure WireGuard**
     -   Go to **Network → Interfaces → wg0**
     -   Import your configuration file → **Load configuration...**
@@ -161,7 +216,8 @@ echo "Applying network change. Reconnect at https://192.168.2.1/ shortly..."
 /etc/init.d/network restart
 ```
 
-### 🛡️ Step 4 --- Adblock (network-wide ad/tracker blocking)
+<details>
+<summary><span style="font-size:1.2em;font-weight:600">🛡️ Step 4 --- Adblock (network-wide ad/tracker blocking)</span></summary>
 
 ```sh
 # 1. Install packages
@@ -169,49 +225,42 @@ apk add adblock luci-app-adblock banip luci-app-banip
 
 # 2 & 3. Configure adblock
 uci set adblock.global.adb_enabled='1'
-uci set adblock.global.adb_forcedns='1'                 # Force Local DNS
-uci set adblock.global.adb_zonelist='wan lan'           # Forced Zones
-uci set adblock.global.adb_portlist='53 853 5353'       # Forced Ports (all DNS ports)
-uci set adblock.global.adb_tld='1'                      # TLD Compression
-uci set adblock.global.adb_report='1'                   # DNS Report
-uci set adblock.global.adb_fetchutil='uclient-fetch'    # Download Utility
-uci set adblock.global.adb_dns='dnsmasq'                # DNS Backend
-
-# Feed selection (clear defaults, then add yours)
-uci -q delete adblock.global.adb_feed
-uci add_list adblock.global.adb_feed='android_tracking'
-uci add_list adblock.global.adb_feed='anti_ad'
-uci add_list adblock.global.adb_feed='smarttv_tracking'
+uci set adblock.global.adb_report='1'
+uci set adblock.global.adb_nftforce='1'
+uci set adblock.global.adb_dns='dnsmasq'
+uci set adblock.global.adb_fetchcmd='uclient-fetch'
+uci set adblock.global.adb_nftdevforce='@lan' '@wan' '@wan6'
+uci set adblock.global.adb_nftportforce='853' '53' '5353'
+uci set adblock.global.adb_feed='adguard' 'adguard_tracking' 'android_tracking' 'anti_ad' 'certpl'
+uci set adblock.global.adb_forcedns='1'
+uci set adblock.global.adb_zonelist='wan lan'
+uci set adblock.global.adb_portlist='53 853 5353'
+uci set adblock.global.adb_tld='1'
+uci set adblock.global.adb_fetchutil='uclient-fetch'
 
 uci commit adblock
 
 # 4. Make dnsmasq ignore /etc/resolv.conf
-section=$(uci -q show dhcp | awk -F'[.=]' '/=dnsmasq$/{print $2; exit}')
-uci rename dhcp.$section='main'
-uci set dhcp.main.noresolv='1'
-uci commit dhcp
+uci delete dhcp.@dnsmasq[0].server
+uci set dhcp.@dnsmasq[0].noresolv='1'
 
+uci add_list dhcp.@dnsmasq[0].server='9.9.9.9'
+uci add_list dhcp.@dnsmasq[0].server='149.112.112.112'
+
+uci commit dhcp
 /etc/init.d/dnsmasq restart
 /etc/init.d/adblock enable
 /etc/init.d/adblock start
 
-# 3. Block DoH bypass
-# Core settings
+# 5. Block DoH bypass
 uci set banip.global.ban_enabled='1'
-uci set banip.global.ban_autodetect='1'        # auto-pick wan/wg0 devices
+uci set banip.global.ban_autodetect='1'
 uci set banip.global.ban_protov4='1'
 uci set banip.global.ban_protov6='1'
-uci set banip.global.ban_logprerouting='0'     # quieter logs
+uci set banip.global.ban_logprerouting='0'
 uci set banip.global.ban_logforwardwan='0'
 uci set banip.global.ban_logforwardlan='0'
-
-# Add the DoH feed (this is the list of known public DoH resolver IPs)
 uci -q delete banip.global.ban_feed
-uci add_list banip.global.ban_feed='doh'
-
-# CRITICAL: assign the doh feed to the *outbound* direction.
-# Without this, the feed only blocks inbound traffic — useless for DoH bypass,
-# which is your LAN clients reaching out to Cloudflare/Google.
 uci set banip.doh=feed
 uci set banip.doh.ban_fetchchain='outbound'
 
@@ -219,9 +268,12 @@ uci commit banip
 service banip restart
 ```
 
+</details>
+
 ------------------------------------------------------------------------
 
-### 🔐 Step 5 --- WireGuard VPN client (route LAN through a VPN provider)
+<details>
+<summary><span style="font-size:1.2em;font-weight:600">🔐 Step 5 --- WireGuard VPN client (route LAN through a VPN provider)</span></summary>
 
 1. Install the packages
     ```sh
@@ -313,9 +365,10 @@ service banip restart
     service firewall restart
     ```
 
-    **Don't want a kill switch?** Skip the loop that deletes `lan → wan`. With it left in place, if the VPN drops, traffic falls back to your regular ISP (privacy-leaking but no outages).
+    > **Don't want a kill switch?** Skip the loop that deletes `lan → wan`. With it left in place, if the VPN drops, traffic falls back to your regular ISP (privacy-leaking but no outages).
 
-4.  3.3 — Fail-safe: a `killswitch` toggle script
+4.  **Fail-safe: a `killswitch` toggle script**
+
     The kill switch is great until your VPN config expires (looking at you, NordVPN), your provider has an outage, or you simply mistype an `Endpoint` and the LAN has no internet. You can always SSH into the router from LAN even when the kill switch is on — the router's own input policy isn't affected — so you'll never be fully locked out. But you want a one-line escape hatch.
  
     This script lets you flip the kill switch on and off without remembering UCI syntax in a panic:
@@ -425,7 +478,7 @@ service banip restart
 ------------------------------------------------------------------------
 
 <details>
-<summary><span style="font-size:1.3em;font-weight:600">📄🔓 Step 5.3 --- VPN Whitelisting (Enable Policy-Based Routing)</span></summary>
+<summary><span style="font-size:1.2em;font-weight:600">📄🔓 Step 5.1 --- VPN Whitelisting (Enable Policy-Based Routing)</span></summary>
 
 1. **Install**
    ```sh
@@ -629,13 +682,12 @@ service banip restart
    service pbr restart
    ```
 
-
 </details>
 
 ------------------------------------------------------------------------
 
 <details>
-<summary><span style="font-size:1.5em;font-weight:600">🌐 Step 6 --- Manage IPv6</span></summary>
+<summary><span style="font-size:1.2em;font-weight:600">🌐 Step 6 --- Manage IPv6</span></summary>
 
 <details>
 <summary><strong>Disable IPv6</strong></summary>
@@ -711,8 +763,7 @@ service banip restart
 </details>
 
 </details>
-
-------------------------------------------------------------------------
+</details>
 
 ## 🎉 Done!
 

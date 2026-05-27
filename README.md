@@ -211,8 +211,25 @@ passwd root
 # Change IPv4 address to 192.168.2.1/24
 uci set network.lan.ipaddr="192.168.2.1"
 uci set network.lan.netmask='255.255.255.0'
+
+#Set Wifi
+uci set wireless.radio0.cell_density='0'
+uci set wireless.default_radio0.ssid='<WIFI_NAME>'
+uci set wireless.default_radio0.encryption='sae-mixed'
+uci set wireless.default_radio0.key='<WIFI_PASS>'
+uci set wireless.default_radio0.ocv='0'
+uci delete wireless.default_radio0.disabled
+
+uci set wireless.radio1.cell_density='0'
+uci set wireless.default_radio1.ssid='<WIFI_NAME>'
+uci set wireless.default_radio1.encryption='sae-mixed'
+uci set wireless.default_radio1.key='<WIFI_PASS>'
+uci set wireless.default_radio1.ocv='0'
+uci delete wireless.default_radio1.disabled
+
+uci commit wireless
 uci commit network
-echo "Applying network change. Reconnect at https://192.168.2.1/ shortly..."
+wifi reload
 /etc/init.d/network restart
 ```
 

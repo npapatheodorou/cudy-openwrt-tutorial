@@ -212,7 +212,7 @@ passwd root
 uci set network.lan.ipaddr="192.168.2.1"
 uci set network.lan.netmask='255.255.255.0'
 
-#Set Wifi
+# Set WiFi
 uci set wireless.radio0.cell_density='0'
 uci set wireless.default_radio0.ssid='<WIFI_NAME>'
 uci set wireless.default_radio0.encryption='sae-mixed'

@@ -1,0 +1,16 @@
+{
+  "name": "Cudy + OpenWrt Tutorial",
+  "short_name": "Cudy OpenWrt",
+  "description": "Flash OpenWrt on a Cudy router, then set up LuCI, Adblock, WireGuard VPN and IPv6.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070c17",
+  "theme_color": "#0b1530",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

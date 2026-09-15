@@ -1,0 +1,28 @@
+name: CI
+
+# Vercel builds and deploys the site; this workflow guards pull requests and main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+
+      # README ↔ website alignment, firmware checksums and helper logic.
+      - run: npm test
+
+      - run: npm run build

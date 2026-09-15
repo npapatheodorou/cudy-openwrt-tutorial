@@ -1,8 +1,20 @@
+<p align="center">
+    <img src="./assets/icons/icon.svg" width="112" alt="Cudy + OpenWrt Tutorial icon"/>
+</p>
+
 # 🚀 Cudy + OpenWrt Tutorial
+
+<p>
+    <a href="https://cudy-openwrt-tutorial.vercel.app/"><img alt="Website" src="https://img.shields.io/badge/website-open%20the%20guide-0d9488?style=flat-square"></a>
+    <a href="./firmware/"><img alt="Firmware packages" src="https://img.shields.io/badge/firmware-18%20packages-2563eb?style=flat-square"></a>
+    <a href="./LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-64748b?style=flat-square"></a>
+</p>
 
 This guide walks you through upgrading your **Cudy router** to
 OpenWrt, enabling LuCI Web UI, blocking ads, setting up WireGuard VPN
 (general steps and provider-specific instructions), and managing IPv6.
+
+> 🌐 **Prefer a website?** The same guide is available at **[cudy-openwrt-tutorial.vercel.app](https://cudy-openwrt-tutorial.vercel.app/)**, with copy buttons, progress tracking, screenshot zoom and fill-in helpers for your Wi-Fi and WireGuard values.
 
 # 🛒 Buying Suggestion
 Buying Suggestion: Prefer the Cudy WR3000E over other WR3000 variants if you plan to install OpenWrt — it offers significantly more memory, supports Wi-Fi 6, and overall provides excellent value for money (VFM)
@@ -12,7 +24,33 @@ Buying Suggestion: Prefer the Cudy WR3000E over other WR3000 variants if you pla
 ## 📥 Step 1 --- Download Required Files
 
 1.  **OpenWrt Firmware (without recovery TFTP):**
-    Select the appropriate firmware according to your router’s model. [Download here](./Cudy%20Intermediary%20OpenWRT%20Firmware/)
+    Select the appropriate firmware according to your router’s model. [Download here](./firmware/)
+    <details>
+        <summary>📦 Firmware packages (18)</summary>
+
+    | Model | Download | Size | Includes |
+    | ----- | -------- | ---- | -------- |
+    | **WR3000E V1** ⭐ Recommended | [WR3000E-V1.zip](./firmware/WR3000E-V1.zip) | 10.1 MB | Sysupgrade image |
+    | WR3000 V1 | [WR3000-V1.zip](./firmware/WR3000-V1.zip) | 9.5 MB | Sysupgrade image · no TFTP recovery |
+    | WR3000H V1 | [WR3000H-V1.zip](./firmware/WR3000H-V1.zip) | 10.1 MB | Sysupgrade image |
+    | WR3000S V1 | [WR3000S-V1.zip](./firmware/WR3000S-V1.zip) | 10.1 MB | Sysupgrade image |
+    | WR2100 V1 | [WR2100-V1.zip](./firmware/WR2100-V1.zip) | 17.4 MB | Flash image · TFTP recovery kit · developer files |
+    | WR1300 V1 | [WR1300-V1.zip](./firmware/WR1300-V1.zip) | 21.6 MB | Flash image (OpenWrt 22.03.2) · TFTP recovery kit · developer files |
+    | WR1300 V2 / V3 | [WR1300-V2-V3.zip](./firmware/WR1300-V2-V3.zip) | 10.2 MB | Flash image (OpenWrt 22.03.0) |
+    | WR1300 V3.0 (update 2025-06-09) | [WR1300-V3.0-update-20250609.zip](./firmware/WR1300-V3.0-update-20250609.zip) | 7.0 MB | Flash image (OpenWrt 23.05.5) |
+    | X6 V1 | [X6-V1.zip](./firmware/X6-V1.zip) | 19.3 MB | Flash image · TFTP recovery kit · developer files |
+    | X6 V2 | [X6-V2.zip](./firmware/X6-V2.zip) | 21.4 MB | Flash image (OpenWrt 22.03) · TFTP recovery kit · developer files |
+    | M1200 V1 | [M1200-V1.zip](./firmware/M1200-V1.zip) | 6.4 MB | Flash image · LAN/WAN ports may swap after flashing, so try both |
+    | M1300 V2 | [M1300-V2.zip](./firmware/M1300-V2.zip) | 7.0 MB | Flash image |
+    | M1800 V2 | [M1800-V2.zip](./firmware/M1800-V2.zip) | 21.6 MB | Flash image (OpenWrt 22.03.2) · TFTP recovery kit · developer files |
+    | TR1200 V1 | [TR1200-V1.zip](./firmware/TR1200-V1.zip) | 6.0 MB | Flash image |
+    | TR3000 V1 | [TR3000-V1.zip](./firmware/TR3000-V1.zip) | 10.1 MB | Sysupgrade image |
+    | AP3000 Outdoor V1 | [AP3000-Outdoor-V1.zip](./firmware/AP3000-Outdoor-V1.zip) | 10.1 MB | Sysupgrade image |
+    | RE3000 V1 | [RE3000-V1.zip](./firmware/RE3000-V1.zip) | 23.5 MB | Sysupgrade image · TFTP recovery kit |
+    | R700 V1 | [R700-V1.zip](./firmware/R700-V1.zip) | 6.0 MB | Flash image |
+
+    Verify your download against [SHA256SUMS.txt](./firmware/SHA256SUMS.txt).
+    </details>
 
 2.  **OpenWrt Firmware Finder (SNAPSHOT builds):**
     Select the firmware that matches your router’s model; ensure the version chosen is `SNAPSHOT`.
@@ -37,7 +75,7 @@ Buying Suggestion: Prefer the Cudy WR3000E over other WR3000 variants if you pla
             <img src="./assets/images/s2_1.png" width="800"/>
         </p>
     </details>
-3.  After upgrade → go to
+3.  After upgrade → visit
     `192.168.1.1 → System → Backup / Flash Firmware`.
 4.  <details>
         <summary>Upload new file and start upgrade using the image download in Step 1.2.</summary>
@@ -55,6 +93,7 @@ Buying Suggestion: Prefer the Cudy WR3000E over other WR3000 variants if you pla
 
 ## 🖥️ Step 3 --- Install LuCI Web Interface
 
+<!-- snippet: luci-install -->
 ```sh
 apk update
 apk add luci
@@ -73,6 +112,12 @@ uci commit uhttpd
 👉 After restart, log in at `192.168.1.1` via LuCI.
 -   Set a new password for root.
 -   Go to **Network → Interfaces → LAN**
+    -   <details>
+            <summary>Image Here</summary>
+            <p align="center">
+                <img src="./assets/images/s3_2.png" width="800"/>
+            </p>
+        </details>
     -   <details>
             <summary>Change IPv4 address → `192.168.2.1/24`</summary>
             <p align="center">
@@ -180,20 +225,26 @@ uci commit uhttpd
 <summary><strong>🛰️ NordVPN</strong></summary>
 
 1.  **Generate Credentials**
-    -   Go to [Nord Account Access Tokens](https://my.nordaccount.com/dashboard/nordvpn/access-tokens/)
+    -   Visit [Nord Account Access Tokens](https://my.nordaccount.com/dashboard/nordvpn/access-tokens/)
         → `Generate a token`.
-    -   Use the provided .exe file `./nordvpn_priv_key_extractor.exe` to generate a **private key also known as `nordlynx_private_key`**.
-2.  **Find Your Recommended Server**
-    -   Go to [NordVPN Manual
-        Configuration](https://my.nordaccount.com/dashboard/nordvpn/manual-configuration/server-recommendation/).
-3.  **Download Configuration**
-    -   From [Nord Configs](https://wg-nord.pages.dev/)
-    -   Open the downloaded `.conf` file and insert your **private key also known as `nordlynx_private_key`**.
-4.  **Configure WireGuard**
+    -   **Copy it**.
+    -   <details>
+            <summary>Image Here</summary>
+            <p align="center">
+                <img src="./assets/images/s5_2_1.png" width="800"/>
+            </p>
+        </details>
+2.  **Find Your Recommended Server and Download Configuration**
+    -   Visit [nordconf-wg](https://nordconf-wg.netlify.app/#private_key). The tool will automatically recommend the nearest server based on your current location.
+    -   Paste your access token into the **NordVPN access token** field
+    -   Generate and download the ``.conf`` configuration file.
+3.  **Configure WireGuard**
     -   Go to **Network → Interfaces → wg0**
     -   Import your configuration file → **Load configuration...**
     -   In Peers → Edit → ✔ Route Allowed IPs
     -   **Save**
+
+> If you'd rather get your NordLynx private key yourself, try the [NordVPN Private Key Extractor](#-extra-tools).
 
 </details>
 
@@ -205,6 +256,7 @@ uci commit uhttpd
 <summary><span style="font-size:1.5em;font-weight:600">⚡ Advanced (Setup using SSH Connection)</span></summary>
 
 👉 After restart, open **PuTTY** and connect to `192.168.1.1` via SSH
+<!-- snippet: advanced-setup -->
 ```sh
 # Set a new root password
 passwd root
@@ -236,6 +288,7 @@ wifi reload
 <details>
 <summary><span style="font-size:1.2em;font-weight:600">🛡️ Step 4 --- Adblock (network-wide ad/tracker blocking)</span></summary>
 
+<!-- snippet: advanced-adblock -->
 ```sh
 # 1. Install packages
 apk add adblock luci-app-adblock banip luci-app-banip
@@ -293,6 +346,7 @@ service banip restart
 <summary><span style="font-size:1.2em;font-weight:600">🔐 Step 5 --- WireGuard VPN client (route LAN through a VPN provider)</span></summary>
 
 1. Install the packages
+    <!-- snippet: wg-install -->
     ```sh
     apk update
     apk add wireguard-tools kmod-wireguard luci-proto-wireguard luci-app-wireguard
@@ -300,6 +354,7 @@ service banip restart
     ```
 
 2. Assumption: you already have a WireGuard `.conf` file in hand. Standard format:
+    <!-- snippet: wg-conf-example -->
     ```ini
     [Interface]
     PrivateKey = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=
@@ -322,7 +377,9 @@ service banip restart
     | `<PEER_PUBLIC_KEY>`        | `[Peer] PublicKey`            |
     | `<ENDPOINT_HOST>`          | host part of `[Peer] Endpoint`  (everything before `:51820`)|
 
+    > 💡 On the [website](https://cudy-openwrt-tutorial.vercel.app/#advanced-step-5) you can paste your `.conf` and these placeholders fill in automatically (parsed locally in your browser).
 
+    <!-- snippet: wg-interface -->
     ```sh
     # Interface
     uci set network.wg0=interface
@@ -351,6 +408,7 @@ service banip restart
 3. Firewall (kill-switch style)
     One `vpn` zone for `wg0`, with masquerading. We also remove the default `lan → wan` forwarding so traffic *only* leaves through the VPN — if the tunnel drops, nothing leaks to your ISP.
 
+    <!-- snippet: wg-firewall -->
     ```sh
     # Named VPN zone covering wg0
     uci set firewall.vpn=zone
@@ -390,6 +448,7 @@ service banip restart
  
     This script lets you flip the kill switch on and off without remembering UCI syntax in a panic:
 
+    <!-- snippet: killswitch-script -->
     ```sh
     cat > /usr/bin/killswitch <<'EOF'
     #!/bin/sh
@@ -452,6 +511,7 @@ service banip restart
     ```
 
     Use it like this:
+    <!-- snippet: killswitch-usage -->
     ```sh
     killswitch status     # see what state you're in
     killswitch off        # disable kill switch — LAN gets direct internet again
@@ -461,6 +521,7 @@ service banip restart
 
     **A more aggressive fail-safe (optional):** drop a copy of `killswitch off` as `/root/PANIC.sh` so you can run `sh /root/PANIC.sh` blindly:
 
+    <!-- snippet: panic-script -->
     ```sh
     cat > /root/PANIC.sh <<'EOF'
     #!/bin/sh
@@ -474,6 +535,7 @@ service banip restart
 4. Verify
     
     Bring up the tunnel and check:
+    <!-- snippet: wg-verify-handshake -->
     ```sh
     ifup wg0
     wg show
@@ -482,6 +544,7 @@ service banip restart
 
     Confirm your external IP changed (from a LAN client, or from the router itself):
  
+    <!-- snippet: wg-verify-ip -->
     ```sh
     curl ifconfig.co
     curl ifconfig.co/country
@@ -498,6 +561,7 @@ service banip restart
 <summary><span style="font-size:1.2em;font-weight:600">📄🔓 Step 5.1 --- VPN Whitelisting (Enable Policy-Based Routing)</span></summary>
 
 1. **Install**
+   <!-- snippet: pbr-install -->
    ```sh
    opkg update
    opkg install pbr luci-app-pbr
@@ -505,6 +569,7 @@ service banip restart
    ```
 
 2. **Enable PBR globally**
+   <!-- snippet: pbr-enable -->
    ```sh
    uci set pbr.config.enabled='1'
    uci set pbr.config.strict_enforcement='1'   # drop traffic if a policy's interface is down (no silent fallback)
@@ -521,6 +586,7 @@ service banip restart
 3. **Add a bypass policy (one per device or group)**
    3.1 — Bypass VPN by MAC address
    For a smart TV (`AA:BB:CC:DD:EE:FF`) that should use the regular ISP connection:
+   <!-- snippet: pbr-bypass-mac -->
    ```sh
    uci set pbr.smart_tv=policy
    uci set pbr.smart_tv.name='Smart TV'
@@ -533,6 +599,7 @@ service banip restart
  
    3.2 — Force a device ONLY through VPN
    For a work laptop (`11:22:33:44:55:66`) that must always use VPN, even if other devices don't:
+   <!-- snippet: pbr-force-vpn -->
    ```sh
    uci set pbr.work_laptop=policy
    uci set pbr.work_laptop.name='Work Laptop'
@@ -545,6 +612,7 @@ service banip restart
  
    3.3 — Bypass VPN for specific destination domains/IPs
    For banking sites that block known VPN exits — route them via `wan` for *all* LAN clients:
+   <!-- snippet: pbr-bypass-domains -->
    ```sh
    uci set pbr.banking=policy
    uci set pbr.banking.name='Banking sites'
@@ -557,6 +625,7 @@ service banip restart
  
    3.4 — Bypass by source IP range
    For a VLAN, subnet, or specific static-IP device:
+   <!-- snippet: pbr-bypass-ip-range -->
    ```sh
    uci set pbr.iot_subnet=policy
    uci set pbr.iot_subnet.name='IoT subnet'
@@ -569,6 +638,7 @@ service banip restart
  
    > `src_addr` accepts single IPs, ranges (`a-b`), or CIDR (`192.168.1.0/28`).
    3.5 — Bypass a single port (e.g. Steam, Plex)
+   <!-- snippet: pbr-bypass-port -->
    ```sh
    uci set pbr.steam=policy
    uci set pbr.steam.name='Steam game traffic'
@@ -582,6 +652,7 @@ service banip restart
  
    3.6 — Combine criteria
    Fields can be combined within a single policy. For example, *"this MAC, only for these ports, via VPN"*:
+   <!-- snippet: pbr-combine -->
    ```sh
    uci set pbr.laptop_torrents=policy
    uci set pbr.laptop_torrents.name='Laptop torrents'
@@ -595,6 +666,7 @@ service banip restart
    ```
  
 4. **List, edit, disable, delete policies**
+   <!-- snippet: pbr-manage -->
    ```sh
    # List all policies
    uci show pbr | grep =policy
@@ -629,6 +701,7 @@ service banip restart
    > **Note:** UCI handles `!` natively — only the LuCI web UI strips that character, which is why most online guides tell you to edit `/etc/config/firewall` by hand. From the CLI we don't need that workaround.
 
    5.1 — Create the rule
+   <!-- snippet: pbr-killswitch-rule -->
    ```sh
    # Named traffic rule: REJECT lan -> wan, UNLESS source MAC is exempted
    uci set firewall.vpn_killswitch=rule
@@ -650,6 +723,7 @@ service banip restart
    ```
  
    The resulting `/etc/config/firewall` entry:
+   <!-- snippet: pbr-killswitch-config -->
    ```
    config rule 'vpn_killswitch'
        option name 'vpn-killswitch'
@@ -662,6 +736,7 @@ service banip restart
    ```
  
    5.2 — Adding / removing exemptions later
+   <!-- snippet: pbr-killswitch-exemptions -->
    ```sh
    # Add another bypass MAC
    uci add_list firewall.vpn_killswitch.src_mac='!11:22:33:44:55:66'
@@ -678,8 +753,11 @@ service banip restart
    uci commit firewall
    service firewall reload
    ```
+
+   > 🧰 Lots of IPs to exempt? The [PBR Firewall Exceptions Generator](#-extra-tools) writes the policy blocks and `!IP` lines for you.
  
 6. **Verification**
+   <!-- snippet: pbr-verify -->
    ```sh
    # Status
    service pbr status
@@ -710,10 +788,12 @@ service banip restart
 <summary><strong>Disable IPv6</strong></summary>
 
 1.  Remove WAN6 interface entirely
+    <!-- snippet: ipv6-disable-wan6 -->
     ``` bash
     uci delete network.wan6
     ```
 2.  Disable IPv6 on LAN
+    <!-- snippet: ipv6-disable-lan -->
     ``` bash
     uci set network.lan.ipv6='0'
     uci set network.lan.delegate='0'
@@ -722,11 +802,13 @@ service banip restart
     ```
 3.  Commit changes
 4.  Disable odhcpd (not needed without IPv6)
+    <!-- snippet: ipv6-disable-odhcpd -->
     ``` bash
     /etc/init.d/odhcpd disable
     /etc/init.d/odhcpd stop
     ```
 5.  **Optional:** Kernel-Level Disable
+    <!-- snippet: ipv6-disable-kernel -->
     ``` bash
     cat >> /etc/sysctl.conf << 'EOF'
     net.ipv6.conf.all.disable_ipv6=1
@@ -735,6 +817,7 @@ service banip restart
     sysctl -p
     ```
 6.  Restart network
+    <!-- snippet: ipv6-disable-restart -->
     ``` bash
     /etc/init.d/network restart
     ```
@@ -744,12 +827,14 @@ service banip restart
 <summary><strong>Enable IPv6</strong></summary>
 
 1.  Create WAN6 interface
+    <!-- snippet: ipv6-enable-wan6 -->
     ``` bash
     uci set network.wan6=interface
     uci set network.wan6.proto='dhcpv6'
     uci set network.wan6.device='@wan'
     ```
 2.  Enable IPv6 on LAN
+    <!-- snippet: ipv6-enable-lan -->
     ``` bash
     uci set network.lan.ipv6='1'
     uci set network.lan.delegate='1'
@@ -757,15 +842,18 @@ service banip restart
     uci set dhcp.lan.ra='server'
     ```
 3.  Commit changes
+    <!-- snippet: ipv6-enable-commit -->
     ``` bash
     uci commit
     ```
 4.  Enable odhcpd
+    <!-- snippet: ipv6-enable-odhcpd -->
     ``` bash
     /etc/init.d/odhcpd enable
     /etc/init.d/odhcpd start
     ```
 5.  **Optional:** Remove Kernel-Level Disable (if previously added)
+    <!-- snippet: ipv6-enable-kernel -->
     ``` bash
     sed -i '/net.ipv6.conf.all.disable_ipv6/d' /etc/sysctl.conf
     sed -i '/net.ipv6.conf.default.disable_ipv6/d' /etc/sysctl.conf
@@ -773,6 +861,7 @@ service banip restart
     sysctl -w net.ipv6.conf.default.disable_ipv6=0
     ```
 6.  Restart network
+    <!-- snippet: ipv6-enable-restart -->
     ``` bash
     /etc/init.d/network restart
     ```
@@ -790,6 +879,62 @@ You now have:
 - ✅ Adblock filtering
 - ✅ WireGuard VPN (general + NordVPN setup)
 - ✅ IPv6 control
+
+------------------------------------------------------------------------
+
+## 🧰 Extra Tools
+
+### 🔑 NordVPN Private Key Extractor
+[`tools/nordvpn_priv_key_extractor.ps1`](./tools/nordvpn_priv_key_extractor.ps1) · [`.exe`](./tools/nordvpn_priv_key_extractor.exe)
+
+Asks for your NordVPN access token (masked input) and queries NordVPN's credentials API to print your service username, password and NordLynx (WireGuard) private key.
+
+<!-- snippet: tool-nordvpn-run -->
+```powershell
+powershell -ExecutionPolicy Bypass -File .\nordvpn_priv_key_extractor.ps1
+```
+
+> The `.exe` is unsigned, so Windows SmartScreen may warn you. Prefer the `.ps1` if you want to read the code before running it.
+
+### 🧭 PBR Firewall Exceptions Generator
+[`tools/pbr_firewall_exceptions_gen.py`](./tools/pbr_firewall_exceptions_gen.py)
+
+Paste IPs (one per line, or separated by commas/spaces) and get `config policy` blocks that route each one via `wan`, plus `list dest_ip '!IP'` lines for your kill-switch rule (Step 5.1).
+
+<!-- snippet: tool-pbr-run -->
+```sh
+python3 pbr_firewall_exceptions_gen.py
+```
+
+Paste the IPs into the terminal, then press Enter on an empty line. An in-browser version is available on the [website](https://cudy-openwrt-tutorial.vercel.app/#pbr-generator).
+
+### 🛡️ Firmware checksums
+[`firmware/SHA256SUMS.txt`](./firmware/SHA256SUMS.txt)
+
+Before you flash, make sure the zip downloaded intact. Compute its SHA-256 and compare it with the value in `SHA256SUMS.txt`.
+
+<!-- snippet: tool-checksums -->
+```shell
+# Windows (PowerShell)
+Get-FileHash .\WR3000E-V1.zip -Algorithm SHA256
+
+# Linux / macOS
+shasum -a 256 WR3000E-V1.zip
+```
+
+------------------------------------------------------------------------
+
+## 📁 Repository Layout
+
+| Path | Contents |
+| ---- | -------- |
+| [`firmware/`](./firmware/) | Cudy intermediary OpenWrt firmware packages + `SHA256SUMS.txt` |
+| [`tools/`](./tools/) | NordVPN key extractor and PBR exceptions generator |
+| [`assets/images/`](./assets/images/) | Guide screenshots |
+| [`assets/icons/`](./assets/icons/) | App icon, favicons and social preview |
+| [`src/`](./src/), [`index.html`](./index.html) | Website (React + TypeScript + Vite), deployed on Vercel |
+
+**Website development:** run `npm install`, then `npm run dev`. Every command block on the website is read straight from this README through the invisible `<!-- snippet: … -->` markers, so edit commands here and the site follows. `npm test` checks that the README, the website and the firmware checksums stay in sync.
 
 ------------------------------------------------------------------------
 

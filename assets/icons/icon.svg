@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Cudy + OpenWrt">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="0" x2="448" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12345a"/>
+      <stop offset="1" stop-color="#060d1c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="256" cy="250" r="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity=".36"/>
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wave" x1="150" y1="110" x2="362" y2="290" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5eead4"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="318" x2="0" y2="428" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#cbd5e1"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#glow)"/>
+  <rect x="6" y="6" width="500" height="500" rx="106" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="2"/>
+  <g fill="none" stroke="url(#wave)" stroke-linecap="round" stroke-width="30">
+    <path d="M150 164a150 150 0 0 1 212 0"/>
+    <path d="M195 209a86 86 0 0 1 122 0"/>
+  </g>
+  <circle cx="256" cy="268" r="21" fill="url(#wave)"/>
+  <g stroke="#e2e8f0" stroke-width="20" stroke-linecap="round">
+    <path d="M142 320 118 238"/>
+    <path d="M370 320 394 238"/>
+  </g>
+  <rect x="92" y="318" width="328" height="110" rx="34" fill="url(#body)"/>
+  <circle cx="148" cy="373" r="13" fill="#14b8a6"/>
+  <circle cx="192" cy="373" r="13" fill="#14b8a6" fill-opacity=".7"/>
+  <circle cx="236" cy="373" r="13" fill="#38bdf8"/>
+  <rect x="288" y="363" width="96" height="20" rx="10" fill="#94a3b8" fill-opacity=".6"/>
+</svg>
